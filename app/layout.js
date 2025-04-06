@@ -1,7 +1,7 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
-import { AppContextProvider } from "@/context/AppContext";
+import ConvexClientProvider from "@/components/providers/ConvexClientProvider";
 
 const inter = Inter({
   weight: "400", // Added required weight property
@@ -17,13 +17,14 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <ClerkProvider>
-      <AppContextProvider>
-        <html lang="en">
-          <body className={`${inter.className} antialiased`}>
-            {children}
-          </body>
-        </html>
-      </AppContextProvider>
+
+      <html lang="en">
+        <body className={`${inter.className} antialiased`}>
+          <ConvexClientProvider>{children}</ConvexClientProvider>
+
+        </body>
+      </html>
+
     </ClerkProvider>
   );
 }

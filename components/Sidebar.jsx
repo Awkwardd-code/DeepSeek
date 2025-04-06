@@ -1,13 +1,13 @@
 import { assets } from '@/assets/assets';
 import Image from 'next/image';
 import React, { useState } from 'react';
-import { useClerk, UserButton } from '@clerk/nextjs';
-import { useAppContext } from '@/context/AppContext';
+import { UserButton, useUser, SignIn, useClerk } from '@clerk/nextjs';
+
 import ChatLabel from './ChatLabel';
 
 const Sidebar = ({ expand, setExpand }) => {
     const { openSignIn } = useClerk();
-    const { user } = useAppContext()
+    const { user, isLoaded } = useUser();
     const [openMenu, setOpenMenu] = useState({ id: 0, open: false })
     return (
         <div className={`flex flex-col justify-between bg-[#212327] pt-7 transition-all z-50 max-md:absolute max-md:h-screen 
@@ -83,7 +83,7 @@ const Sidebar = ({ expand, setExpand }) => {
                 </button>
                 <div className={`mt-8 text-white/25 text-sm ${expand ? "block" : "hidden"}`}>
                     <p className="my-1">Recents</p>
-                    <ChatLabel openMenu={openMenu} setOpenMenu={setOpenMenu}/>
+                    <ChatLabel openMenu={openMenu} setOpenMenu={setOpenMenu} />
                 </div>
             </div>
             <div>
@@ -128,20 +128,21 @@ const Sidebar = ({ expand, setExpand }) => {
                     )}
                 </div>
 
-                <div onClick={user ? null : openSignIn}
-                    className={`flex items-center ${expand ? 'hover:bg-white/10 rounded-lg' : 'justify-center w-full'} gap-3 text-white/60 text-sm p-2 mt-2 cursor-pointer transition-colors duration-200  `}
+                <div
+                    onClick={user ? null : openSignIn}
+                    className={`flex items-center ${expand ? 'hover:bg-white/10 rounded-lg' : 'justify-center w-full'} gap-3 text-white/60 text-sm p-2 mt-2 cursor-pointer transition-colors duration-200`}
                 >
-                    {
-                        user ? <UserButton />
-                            :
-                            <Image
-                                src={assets.profile_icon}
-                                alt="Profile"
-                                className="w-7"
-                                width={28}
-                                height={28}
-                            />
-                    }
+                    {user ? (
+                        <UserButton />
+                    ) : (
+                        <Image
+                            src={assets.profile_icon}
+                            alt="Profile"
+                            className="w-7"
+                            width={28}
+                            height={28}
+                        />
+                    )}
 
                     {expand && <span className="truncate">My Profile</span>}
                 </div>
